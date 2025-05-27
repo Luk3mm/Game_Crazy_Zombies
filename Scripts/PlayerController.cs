@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     [Header("Projectile Settings")]
     public float projectileSpeed;
     public GameObject projectilePrefab;
-    //public Transform shootPoint;
     public int maxProjectile;
     private int currentProjectile;
 
@@ -173,6 +172,12 @@ public class PlayerController : MonoBehaviour
         {
             healthBarFill.fillAmount = (float)currentHealth / maxHealth;
         }
+    }
+
+    public void Heal(int amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        UpdateHealthBar();
     }
 
     private void Death()
