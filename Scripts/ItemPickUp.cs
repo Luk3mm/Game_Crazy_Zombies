@@ -12,6 +12,7 @@ public class ItemPickUp : MonoBehaviour
 {
     public ItemType itemType;
     public int healAmount;
+    public float armorDuration;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -31,6 +32,10 @@ public class ItemPickUp : MonoBehaviour
         {
             case ItemType.Heal:
                 player.Heal(healAmount);
+                break;
+
+            case ItemType.Armor:
+                player.ActiveArmor(armorDuration);
                 break;
         }
 

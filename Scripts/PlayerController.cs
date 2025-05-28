@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
     public int maxHealth;
     private int currentHealth;
 
+    [Header("Armor Settings")]
+    public float armorDuration;
+    public Image armorUI;
+    public bool isInvincible = false;
+
     [Header("UI Settings")]
     public Text projectileText;
     public Image healthBarFill;
@@ -155,6 +160,11 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isInvincible)
+        {
+            return;
+        }
+
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
@@ -183,6 +193,35 @@ public class PlayerController : MonoBehaviour
     private void Death()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void ActiveArmor(float duration)
+    {
+        if (isInvincible)
+        {
+            return;
+        }
+
+        StartCoroutine(ArmorRoutine(duration));
+    }
+
+    IEnumerator ArmorRoutine(float duration)
+    {
+        isInvincible = true;
+
+        if(armorUI != null)
+        {
+            armorUI.gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        isInvincible = false;
+
+        if(armorUI != null)
+        {
+            armorUI.gameObject.SetActive(false);
+        }
     }
 
     private void OnDrawGizmosSelected()

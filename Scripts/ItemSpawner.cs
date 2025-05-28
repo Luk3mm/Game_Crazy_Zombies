@@ -16,18 +16,13 @@ public class ItemSpawner : MonoBehaviour
     public ItemSpawnData[] spawnableItens;
 
     public float spawnInterval;
+    public float spawnAreaRadius;
     public Transform[] spawnPoints;
 
     // Start is called before the first frame update
     void Start()
     {
         InvokeRepeating(nameof(AttemptSpawn), spawnInterval, spawnInterval);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void AttemptSpawn()
@@ -37,7 +32,11 @@ public class ItemSpawner : MonoBehaviour
             if(Random.value <= item.spawnChance)
             {
                 Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-                Instantiate(item.prefab, spawnPoint.position, item.prefab.transform.rotation);
+
+                Vector2 offset = Random.insideUnitCircle * spawnAreaRadius;
+                Vector3 spawnPos = spawnPoint.position + (Vector3)offset;
+
+                Instantiate(item.prefab, spawnPos, item.prefab.transform.rotation);
                 //break; //Caso queira que seja um por vez;
             }
         }
