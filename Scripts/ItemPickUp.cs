@@ -5,14 +5,19 @@ using UnityEngine;
 public enum ItemType
 {
     Heal,
-    Armor
+    Armor,
+    SpeedBoost
 }
 
 public class ItemPickUp : MonoBehaviour
 {
     public ItemType itemType;
+
     public int healAmount;
     public float armorDuration;
+
+    public float speedBoostAmount;
+    public float speedBoostDuration;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -36,6 +41,10 @@ public class ItemPickUp : MonoBehaviour
 
             case ItemType.Armor:
                 player.ActiveArmor(armorDuration);
+                break;
+
+            case ItemType.SpeedBoost:
+                player.ActiveSpeedBoost(speedBoostAmount, speedBoostDuration);
                 break;
         }
 

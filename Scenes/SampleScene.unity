@@ -78170,12 +78170,15 @@ MonoBehaviour:
   spawnableItens:
   - prefab: {fileID: 5077413856036371988, guid: fdaec35aa9545c548b0a962c93d80915, type: 3}
     type: 0
-    spawnChance: 50
+    spawnChance: 15
   - prefab: {fileID: 8315293285804805326, guid: e13b1a1c8b383644eba828eb88e96522, type: 3}
     type: 1
-    spawnChance: 40
+    spawnChance: 15
+  - prefab: {fileID: 6607832399210813125, guid: a6b91fc58e6ad39449a15b83611142c2, type: 3}
+    type: 2
+    spawnChance: 15
   spawnInterval: 5
-  spawnAreaRadius: 1
+  spawnAreaRadius: 1.5
   spawnPoints:
   - {fileID: 1949187215}
   - {fileID: 452998234}

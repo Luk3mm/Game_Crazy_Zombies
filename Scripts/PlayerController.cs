@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
     public Image armorUI;
     public bool isInvincible = false;
 
+    [Header("SpeedBoost Settings")]
+    private float initialSpeed;
+    private Coroutine speedBoostRoutine;
+
     [Header("UI Settings")]
     public Text projectileText;
     public Image healthBarFill;
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         currentProjectile = maxProjectile;
         currentHealth = maxHealth;
+        initialSpeed = speed;
         UpdateHealthBar();
     }
 
@@ -222,6 +227,26 @@ public class PlayerController : MonoBehaviour
         {
             armorUI.gameObject.SetActive(false);
         }
+    }
+
+    public void ActiveSpeedBoost(float boostedSpeed, float duration)
+    {
+        if(speedBoostRoutine != null)
+        {
+            StopCoroutine(speedBoostRoutine);
+        }
+
+        speedBoostRoutine = StartCoroutine(SpeedBoostRoutine(boostedSpeed, duration));
+    }
+
+    IEnumerator SpeedBoostRoutine(float boostedSpeed, float duration)
+    {
+        speed = boostedSpeed;
+
+        yield return new WaitForSeconds(duration);
+
+        speed = initialSpeed;
+        speedBoostRoutine = null;
     }
 
     private void OnDrawGizmosSelected()
