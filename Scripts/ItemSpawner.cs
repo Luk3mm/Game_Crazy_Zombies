@@ -41,4 +41,22 @@ public class ItemSpawner : MonoBehaviour
             }
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        if(spawnPoints == null || spawnPoints.Length == 0)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.green;
+
+        foreach (Transform point in spawnPoints)
+        {
+            if(point != null)
+            {
+                Gizmos.DrawWireSphere(point.position, spawnAreaRadius);
+            }
+        }
+    }
 }

@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     [Header("SpeedBoost Settings")]
     private float initialSpeed;
     private Coroutine speedBoostRoutine;
+    public Image speedBoostUI;
 
     [Header("UI Settings")]
     public Text projectileText;
@@ -84,8 +85,6 @@ public class PlayerController : MonoBehaviour
         if (isWalk)
         {
             lastDirection = moveDir.normalized;
-
-            //shootPoint.localPosition = lastDirection;
         }
 
         anim.SetFloat("axisX", lastDirection.x);
@@ -243,9 +242,20 @@ public class PlayerController : MonoBehaviour
     {
         speed = boostedSpeed;
 
+        if(speedBoostUI != null)
+        {
+            speedBoostUI.enabled = true;
+        }
+
         yield return new WaitForSeconds(duration);
 
         speed = initialSpeed;
+
+        if(speedBoostUI != null)
+        {
+            speedBoostUI.enabled = false;
+        }
+
         speedBoostRoutine = null;
     }
 
