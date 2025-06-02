@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public event System.Action OnDeath;
+
     public float speedEnemy;
     public int maxHealth;
     public float deathDelay;
@@ -83,6 +85,8 @@ public class EnemyController : MonoBehaviour
 
         DropArrow();
 
+        OnDeath?.Invoke();
+
         Destroy(gameObject, deathDelay);
     }
 
@@ -118,7 +122,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if(collision.gameObject.CompareTag("Player") && Time.time > lastAttackTime + attackCoolDown)
         {
@@ -126,7 +130,10 @@ public class EnemyController : MonoBehaviour
 
             if(player != null)
             {
-                anim.SetTrigger("attack");
+                if(anim != null)
+                {
+                    anim.SetTrigger("attack");
+                }
 
                 player.TakeDamage(damageInPlayer);
                 lastAttackTime = Time.time;
