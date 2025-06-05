@@ -38,12 +38,14 @@ public class PlayerController : MonoBehaviour
     [Header("UI Settings")]
     public Text projectileText;
     public Image healthBarFill;
+    public GameObject deathPanel;
     
     private Rigidbody2D rig;
     private Animator anim;
     private Vector2 lastDirection = Vector2.down;
     private bool isWalk = false;
     private bool isShooting = false;
+    private bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -54,6 +56,11 @@ public class PlayerController : MonoBehaviour
         currentHealth = maxHealth;
         initialSpeed = speed;
         UpdateHealthBar();
+
+        if(deathPanel != null)
+        {
+            deathPanel.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -164,7 +171,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isInvincible)
+        if (isInvincible || isDead)
         {
             return;
         }
@@ -196,7 +203,10 @@ public class PlayerController : MonoBehaviour
 
     private void Death()
     {
-        SceneManager.LoadScene(0);
+        isDead = true;
+        anim.SetTrigger("death");
+
+        StartCoroutine(ShowDeathPanelWithDelay(1.5f));
     }
 
     public void ActiveArmor(float duration)
@@ -257,6 +267,35 @@ public class PlayerController : MonoBehaviour
         }
 
         speedBoostRoutine = null;
+    }
+
+    IEnumerator ShowDeathPanelWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Time.timeScale = 0f;
+
+        if(deathPanel != null)
+        {
+            deathPanel.SetActive(true);
+        }
+    }
+
+    public void Retry()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void BackToMain()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     private void OnDrawGizmosSelected()
