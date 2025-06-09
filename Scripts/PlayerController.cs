@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
     public Text projectileText;
     public Image healthBarFill;
     public GameObject deathPanel;
+
+    [Header("Audios Settings")]
+    public AudioSource attackMeleeSound;
     
     private Rigidbody2D rig;
     private Animator anim;
@@ -66,6 +69,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         Walk();
         Attack();
         Shooting();
@@ -103,6 +111,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
+            attackMeleeSound.Play();
             anim.SetTrigger("attack");
         }
     }
