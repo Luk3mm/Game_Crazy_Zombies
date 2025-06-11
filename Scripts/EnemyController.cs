@@ -25,6 +25,9 @@ public class EnemyController : MonoBehaviour
     public float damageColorDuration;
     private Color damageColor = Color.red;
 
+    [Header("Death Effect")]
+    public GameObject deathBloodObject;
+
     private bool isDead = false;
     private int currentHealth;
     private Transform player;
@@ -96,6 +99,11 @@ public class EnemyController : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
 
         DropArrow();
+
+        if (deathBloodObject != null)
+        {
+            deathBloodObject.SetActive(true);
+        }
 
         OnDeath?.Invoke();
 

@@ -13,11 +13,19 @@ public class ItemSpawner : MonoBehaviour
         public float spawnChance;
     }
 
+    [System.Serializable]
+    public class SpawnPointData
+    {
+        public Transform point;
+        public int maxItens;
+        [HideInInspector] public List<GameObject> spawnedItens = new List<GameObject>();
+    }
+
     public ItemSpawnData[] spawnableItens;
 
     public float spawnInterval;
     public float spawnAreaRadius;
-    public Transform[] spawnPoints;
+    public SpawnPointData[] spawnPoints;
 
     // Start is called before the first frame update
     void Start()
@@ -27,18 +35,30 @@ public class ItemSpawner : MonoBehaviour
 
     private void AttemptSpawn()
     {
-        foreach(var item in spawnableItens)
+        foreach(var point in spawnPoints)
         {
-            if(Random.value <= item.spawnChance)
+            if(point.spawnedItens.Count > point.maxItens)
             {
-                Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-
-                Vector2 offset = Random.insideUnitCircle * spawnAreaRadius;
-                Vector3 spawnPos = spawnPoint.position + (Vector3)offset;
-
-                Instantiate(item.prefab, spawnPos, item.prefab.transform.rotation);
-                //break; //Caso queira que seja um por vez;
+                continue;
             }
+
+            foreach(var itemData in spawnableItens)
+            {
+                if(Random.value <= itemData.spawnChance / 100f)
+                {
+                    Vector2 offset = Random.insideUnitCircle * spawnAreaRadius;
+                    Vector3 spawnPos = point.point.position + (Vector3)offset;
+
+                    GameObject item = Instantiate(itemData.prefab, spawnPos, Quaternion.identity);
+                    point.spawnedItens.Add(item);
+
+                    ItemDespawnTracker tracker = item.AddComponent<ItemDespawnTracker>();
+                    tracker.OnDespawn += () => point.spawnedItens.Remove(item);
+
+                    //break; //Caso queira que seja um por vez;
+                }
+            }
+
         }
     }
 
@@ -51,11 +71,11 @@ public class ItemSpawner : MonoBehaviour
 
         Gizmos.color = Color.green;
 
-        foreach (Transform point in spawnPoints)
+        foreach (var point in spawnPoints)
         {
             if(point != null)
             {
-                Gizmos.DrawWireSphere(point.position, spawnAreaRadius);
+                Gizmos.DrawWireSphere(point.point.position, spawnAreaRadius);
             }
         }
     }
