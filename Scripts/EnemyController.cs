@@ -21,9 +21,15 @@ public class EnemyController : MonoBehaviour
     public float dropDistance;
     public float dropMoveDuration;
 
+    [Header("Damage Feedback")]
+    public float damageColorDuration;
+    private Color damageColor = Color.red;
+
     private bool isDead = false;
     private int currentHealth;
     private Transform player;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
     private Rigidbody2D rig;
     private Animator anim;
@@ -35,6 +41,8 @@ public class EnemyController : MonoBehaviour
         currentHealth = maxHealth;
         rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
     }
 
     // Update is called once per frame
@@ -68,6 +76,10 @@ public class EnemyController : MonoBehaviour
         {
             rig.velocity = Vector2.zero;
             Death();
+        }
+        else
+        {
+            StartCoroutine(FlashDamageColor());
         }
     }
 
@@ -120,6 +132,13 @@ public class EnemyController : MonoBehaviour
             drop.position = Vector3.Lerp(start, end, Mathf.SmoothStep(0, 1, t));
             yield return null;
         }
+    }
+
+    IEnumerator FlashDamageColor()
+    {
+        spriteRenderer.color = damageColor;
+        yield return new WaitForSeconds(damageColorDuration);
+        spriteRenderer.color = originalColor;
     }
 
     private void OnCollisionStay2D(Collision2D collision)

@@ -130,6 +130,7 @@ MonoBehaviour:
   dropChance: 50
   dropDistance: 0.5
   dropMoveDuration: 0.5
+  damageColorDuration: 0.5
 --- !u!50 &6943632482278316977
 Rigidbody2D:
   serializedVersion: 4

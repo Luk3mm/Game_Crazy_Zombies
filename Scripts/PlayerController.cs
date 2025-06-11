@@ -42,10 +42,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("Audios Settings")]
     public AudioSource attackMeleeSound;
+    public AudioSource footstepSound;
+
+    [Header("Damage Feedback")]
+    public float damageColorDuration;
+    private Color damageColor = Color.red;
     
     private Rigidbody2D rig;
     private Animator anim;
     private Vector2 lastDirection = Vector2.down;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
     private bool isWalk = false;
     private bool isShooting = false;
     private bool isDead = false;
@@ -55,6 +62,8 @@ public class PlayerController : MonoBehaviour
     {
         rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
         currentProjectile = maxProjectile;
         currentHealth = maxHealth;
         initialSpeed = speed;
@@ -88,6 +97,8 @@ public class PlayerController : MonoBehaviour
 
     public void Walk()
     {
+        if (isDead) { return; }
+
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
@@ -100,6 +111,18 @@ public class PlayerController : MonoBehaviour
         if (isWalk)
         {
             lastDirection = moveDir.normalized;
+
+            if (!footstepSound.isPlaying)
+            {
+                footstepSound.Play();
+            }
+        }
+        else
+        {
+            if (footstepSound.isPlaying)
+            {
+                footstepSound.Stop();
+            }
         }
 
         anim.SetFloat("axisX", lastDirection.x);
@@ -194,6 +217,10 @@ public class PlayerController : MonoBehaviour
         {
             Death();
         }
+        else
+        {
+            StartCoroutine(FlashDamageColor());
+        }
     }
 
     private void UpdateHealthBar()
@@ -213,7 +240,12 @@ public class PlayerController : MonoBehaviour
     private void Death()
     {
         isDead = true;
+        rig.velocity = Vector2.zero;
         anim.SetTrigger("death");
+
+        GetComponent<Collider2D>().enabled = false;
+
+        footstepSound.Stop();
 
         StartCoroutine(ShowDeathPanelWithDelay(1.5f));
     }
@@ -290,6 +322,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator FlashDamageColor()
+    {
+        spriteRenderer.color = damageColor;
+        yield return new WaitForSeconds(damageColorDuration);
+        spriteRenderer.color = originalColor;
+    }
+
     public void Retry()
     {
         Time.timeScale = 1f;
@@ -307,7 +346,7 @@ public class PlayerController : MonoBehaviour
         Application.Quit();
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         if(attackPoint == null)
         {
