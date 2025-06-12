@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     [Header("Audios Settings")]
     public AudioSource attackMeleeSound;
     public AudioSource footstepSound;
+    public AudioSource shootSound;
 
     [Header("Damage Feedback")]
     public float damageColorDuration;
@@ -145,6 +146,7 @@ public class PlayerController : MonoBehaviour
         {
             isShooting = true;
             rig.velocity = Vector2.zero;
+            shootSound.Play();
             anim.SetTrigger("shoot");
         }
     }

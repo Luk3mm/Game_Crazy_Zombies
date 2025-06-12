@@ -6,6 +6,13 @@ public class ProjectilePickup : MonoBehaviour
 {
     public int projectileAmount;
 
+    private AudioSource arrowPickupAudio;
+
+    private void Awake()
+    {
+        arrowPickupAudio = GetComponent<AudioSource>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -15,6 +22,11 @@ public class ProjectilePickup : MonoBehaviour
             if(player != null)
             {
                 player.AddProjectile(projectileAmount);
+            }
+
+            if(arrowPickupAudio != null && arrowPickupAudio != null)
+            {
+                AudioSource.PlayClipAtPoint(arrowPickupAudio.clip, transform.position);
             }
 
             Destroy(gameObject);

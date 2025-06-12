@@ -28,11 +28,15 @@ public class EnemyController : MonoBehaviour
     [Header("Death Effect")]
     public GameObject deathBloodObject;
 
+    [Header("Audio Death")]
+    public AudioClip deathAudio;
+
     private bool isDead = false;
     private int currentHealth;
     private Transform player;
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
+    private AudioSource audioSource;
 
     private Rigidbody2D rig;
     private Animator anim;
@@ -44,6 +48,7 @@ public class EnemyController : MonoBehaviour
         currentHealth = maxHealth;
         rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
     }
@@ -97,6 +102,12 @@ public class EnemyController : MonoBehaviour
         }
 
         GetComponent<Collider2D>().enabled = false;
+
+        if(deathAudio != null && audioSource != null)
+        {
+            audioSource.clip = deathAudio;
+            audioSource.PlayOneShot(deathAudio);
+        }
 
         DropArrow();
 

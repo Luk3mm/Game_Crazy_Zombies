@@ -19,6 +19,13 @@ public class ItemPickUp : MonoBehaviour
     public float speedBoostAmount;
     public float speedBoostDuration;
 
+    private AudioSource pickupAudio;
+
+    private void Awake()
+    {
+        pickupAudio = GetComponent<AudioSource>();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.gameObject.CompareTag("Player"))
@@ -46,6 +53,11 @@ public class ItemPickUp : MonoBehaviour
             case ItemType.SpeedBoost:
                 player.ActiveSpeedBoost(speedBoostAmount, speedBoostDuration);
                 break;
+        }
+
+        if(pickupAudio != null && pickupAudio.clip != null)
+        {
+            AudioSource.PlayClipAtPoint(pickupAudio.clip, transform.position);
         }
 
         Destroy(gameObject);
