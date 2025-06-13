@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     public AudioSource attackMeleeSound;
     public AudioSource footstepSound;
     public AudioSource shootSound;
+    public AudioSource deathSound;
+    public GameObject backgroundMusicMain;
 
     [Header("Damage Feedback")]
     public float damageColorDuration;
@@ -246,6 +248,21 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("death");
 
         GetComponent<Collider2D>().enabled = false;
+
+        if(backgroundMusicMain != null)
+        {
+            AudioSource bgAudio = backgroundMusicMain.GetComponent<AudioSource>();
+
+            if(bgAudio != null)
+            {
+                bgAudio.Stop();
+            }
+        }
+
+        if(deathSound != null)
+        {
+            deathSound.Play();
+        }
 
         footstepSound.Stop();
 
