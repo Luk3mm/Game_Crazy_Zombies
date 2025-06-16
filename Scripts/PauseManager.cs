@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class PauseManager : MonoBehaviour
 {
     public GameObject pausePanel;
+    public GameObject audioPanel;
+
     private bool isPaused = false;
 
     // Start is called before the first frame update
@@ -58,5 +60,10 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         pausePanel.SetActive(false);
+    }
+
+    public void AudioSettingShow()
+    {
+        audioPanel.SetActive(true);
     }
 }

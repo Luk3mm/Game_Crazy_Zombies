@@ -6,12 +6,19 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviour
 {
     public GameObject creditsPanel;
+    public GameObject crossfade;
+    public GameObject instructionsPanel;
+    public GameObject audiosPanel;
+
+    public Animator transition;
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             creditsPanel.SetActive(false);
+            instructionsPanel.SetActive(false);
+            audiosPanel.SetActive(false);
         }
     }
 
@@ -19,7 +26,7 @@ public class MainMenuManager : MonoBehaviour
     {
         Time.timeScale = 1f;
 
-        SceneManager.LoadScene(1);
+        StartCoroutine(LoadLevel(1));
     }
 
     public void Exit()
@@ -30,5 +37,26 @@ public class MainMenuManager : MonoBehaviour
     public void CreditsShow()
     {
         creditsPanel.SetActive(true);
+    }
+
+    public void InstructionsShow()
+    {
+        instructionsPanel.SetActive(true);
+    }
+
+    public void AudioShow()
+    {
+        audiosPanel.SetActive(true);
+    }
+
+    IEnumerator LoadLevel(int levelIndex)
+    {
+        crossfade.SetActive(true);
+
+        transition.SetTrigger("start");
+
+        yield return new WaitForSeconds(1);
+
+        SceneManager.LoadScene(levelIndex);
     }
 }
