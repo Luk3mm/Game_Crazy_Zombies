@@ -18,6 +18,8 @@ public class EnemySpawner : MonoBehaviour
     public bool showGizmos = true;
     public Color gizmoColor = Color.red;
 
+    [HideInInspector]
+    public bool canSpawn = true;
     private List<Vector3> spawnPositions = new List<Vector3>();
     private int currentEnemies;
 
@@ -60,7 +62,7 @@ public class EnemySpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnInterval);
 
-            if(currentEnemies >= maxEnemies || spawnPositions.Count == 0)
+            if(!canSpawn || currentEnemies >= maxEnemies || spawnPositions.Count == 0)
             {
                 continue;
             }
@@ -82,6 +84,7 @@ public class EnemySpawner : MonoBehaviour
     private void OnEnemyDeath()
     {
         currentEnemies = Mathf.Max(0, currentEnemies - 1);
+        FindObjectOfType<HorderManager>()?.RegisterEnemyDefeat();
     }
 
     private void OnDrawGizmos()

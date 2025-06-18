@@ -27,6 +27,9 @@ public class ItemSpawner : MonoBehaviour
     public float spawnAreaRadius;
     public SpawnPointData[] spawnPoints;
 
+    [HideInInspector]
+    public bool canSpawn = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,11 @@ public class ItemSpawner : MonoBehaviour
 
     private void AttemptSpawn()
     {
+        if (!canSpawn)
+        {
+            return;
+        }
+
         foreach(var point in spawnPoints)
         {
             if(point.spawnedItens.Count > point.maxItens)
