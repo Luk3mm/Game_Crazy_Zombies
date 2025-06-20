@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.O))
         {
             attackMeleeSound.Play();
             anim.SetTrigger("attack");
@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
 
     public void Shooting()
     {
-        if (Input.GetButtonDown("Fire2") && !isShooting)
+        if ((Input.GetButtonDown("Fire2") || Input.GetKeyDown(KeyCode.P)) && !isShooting)
         {
             isShooting = true;
             rig.velocity = Vector2.zero;

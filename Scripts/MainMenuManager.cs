@@ -12,6 +12,8 @@ public class MainMenuManager : MonoBehaviour
 
     public Animator transition;
 
+    public AudioSource startAAudio;
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -25,6 +27,8 @@ public class MainMenuManager : MonoBehaviour
     public void StartGame()
     {
         Time.timeScale = 1f;
+
+        startAAudio.Play();
 
         StartCoroutine(LoadLevel(1));
     }
@@ -55,7 +59,7 @@ public class MainMenuManager : MonoBehaviour
 
         transition.SetTrigger("start");
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.5f);
 
         SceneManager.LoadScene(levelIndex);
     }
