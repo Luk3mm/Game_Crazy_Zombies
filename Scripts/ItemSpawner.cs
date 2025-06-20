@@ -70,6 +70,22 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
+    public void ResetSpawnedItems()
+    {
+        foreach(var point in spawnPoints)
+        {
+            for(int i = point.spawnedItens.Count - 1; i >= 0; i--)
+            {
+                if (point.spawnedItens[i] != null)
+                {
+                    Destroy(point.spawnedItens[i]);
+                }
+            }
+
+            point.spawnedItens.Clear();
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         if(spawnPoints == null || spawnPoints.Length == 0)

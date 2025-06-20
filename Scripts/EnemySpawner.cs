@@ -23,17 +23,21 @@ public class EnemySpawner : MonoBehaviour
     private List<Vector3> spawnPositions = new List<Vector3>();
     private int currentEnemies;
 
+    private HorderManager horderManager;
+
     // Start is called before the first frame update
     void Start()
     {
         CollectSpawnPositions();
         StartCoroutine(SpawnRoutine());
+
+        horderManager = FindObjectOfType<HorderManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        Debug.Log($"Inimigos atuais: {currentEnemies} / {maxEnemies}");
     }
 
     private void CollectSpawnPositions()
@@ -84,7 +88,23 @@ public class EnemySpawner : MonoBehaviour
     private void OnEnemyDeath()
     {
         currentEnemies = Mathf.Max(0, currentEnemies - 1);
-        FindObjectOfType<HorderManager>()?.RegisterEnemyDefeat();
+
+        Debug.Log("Inimigo derrotado. Inimigos vivos: " + currentEnemies);
+
+        if (horderManager != null)
+        {
+            horderManager?.RegisterEnemyDefeat();
+        }
+    }
+
+    public void ResetSpawner()
+    {
+        currentEnemies = 0;
+
+        foreach(var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            Destroy(enemy);
+        }
     }
 
     private void OnDrawGizmos()

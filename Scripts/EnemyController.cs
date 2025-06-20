@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -116,7 +117,10 @@ public class EnemyController : MonoBehaviour
             deathBloodObject.SetActive(true);
         }
 
+        Debug.Log("Invocando evento OnDeath");
         OnDeath?.Invoke();
+
+        //ZombieKillUI.instance?.AddKill();
 
         Destroy(gameObject, deathDelay);
     }

@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
+    public static bool GameIsPaused { get; private set; }
+
     public GameObject pausePanel;
     public GameObject audioPanel;
 
@@ -31,6 +33,7 @@ public class PauseManager : MonoBehaviour
     public void TogglePause()
     {
         isPaused = !isPaused;
+        GameIsPaused = isPaused;
 
         if (isPaused)
         {
@@ -41,29 +44,45 @@ public class PauseManager : MonoBehaviour
         {
             Time.timeScale = 1f;
             pausePanel.SetActive(false);
+            CloseAllPanels(); 
         }
     }
 
     public void Retry()
     {
+        GameIsPaused = false;
         Time.timeScale = 1f;
+        CloseAllPanels();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void BackToMainMenu()
     {
+        GameIsPaused = false;
         Time.timeScale = 1f;
+        CloseAllPanels();
         SceneManager.LoadScene(0);
     }
 
     public void ResumeGame()
     {
+        GameIsPaused = false;
         Time.timeScale = 1f;
+        CloseAllPanels();
         pausePanel.SetActive(false);
     }
 
     public void AudioSettingShow()
     {
+        //GameIsPaused = false;
         audioPanel.SetActive(true);
+    }
+
+    private void CloseAllPanels()
+    {
+        if(audioPanel != null)
+        {
+            audioPanel.SetActive(false);
+        }
     }
 }

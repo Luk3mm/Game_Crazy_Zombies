@@ -46,6 +46,10 @@ public class HorderManager : MonoBehaviour
             yield break;
         }
 
+        enemiesDefeated = 0;
+        enemySpawner.ResetSpawner();
+        itemSpawner.ResetSpawnedItems();
+
         Horde horde = hordes[currentHorderIndex];
 
         enemySpawner.spawnInterval = horde.enemySpawnInterval;
@@ -59,12 +63,15 @@ public class HorderManager : MonoBehaviour
         enemySpawner.canSpawn = true;
         itemSpawner.canSpawn = true;
 
-        enemiesDefeated = 0;
+        ZombieKillUI.instance?.ResetKillForHorde();
+
         yield return null;
     }
 
     public void RegisterEnemyDefeat()
     {
+        ZombieKillUI.instance?.AddKill();
+
         enemiesDefeated++;
 
         if(currentHorderIndex < hordes.Length && enemiesDefeated >= hordes[currentHorderIndex].enemiesToDefeat)
@@ -78,22 +85,20 @@ public class HorderManager : MonoBehaviour
         enemySpawner.canSpawn = false;
         itemSpawner.canSpawn = false;
 
-        foreach(var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
-        {
-            Destroy(enemy);
-        }
-        foreach(var item in GameObject.FindGameObjectsWithTag("Item"))
-        {
-            Destroy(item);
-        }
+        enemySpawner.ResetSpawner();
+        itemSpawner.ResetSpawnedItems();
 
-        hordeTransitionPanel.SetActive(true);
+        if(hordeTransitionPanel != null)
+            hordeTransitionPanel.SetActive(true);
 
         yield return new WaitForSeconds(intermissionDuration);
 
-        hordeTransitionPanel.SetActive(false);
+        if(hordeTransitionPanel != null)
+            hordeTransitionPanel.SetActive(false);
 
         currentHorderIndex++;
+        enemiesDefeated = 0;
+
         StartCoroutine(StartHorde());
     }
 

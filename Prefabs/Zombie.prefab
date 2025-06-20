@@ -123,13 +123,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44978301f40ecbd49a4f5aa1cc51b109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedEnemy: 2
+  speedEnemy: 2.2
   maxHealth: 2
   deathDelay: 2
   damageInPlayer: 5
   attackCoolDown: 1
   arrowDropPrefab: {fileID: 1020477979136777528, guid: e5c54ed94cfc6824da3bc5cf104dbba2, type: 3}
-  dropChance: 50
+  dropChance: 35
   dropDistance: 0.5
   dropMoveDuration: 0.5
   damageColorDuration: 0.5
